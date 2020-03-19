@@ -206,7 +206,6 @@
 #include <stdint.h>
 #include <algorithm>
 #include <map>
-#include <mutex>
 #include <string>
 #include <type_traits>
 #include <vector>
@@ -216,6 +215,7 @@
 #endif
 
 #include "re2/stringpiece.h"
+#include "util/mutex.h"
 
 namespace re2 {
 class Prog;

@@ -10,6 +10,10 @@
  * You should assume the locks are *not* re-entrant.
  */
 
+#ifdef RE2_NO_THREADS
+#include "nothr.h"
+#endif // RE2_NO_THREADS
+
 #ifdef _WIN32
 // Requires Windows Vista or Windows Server 2008 at minimum.
 #include <windows.h>
