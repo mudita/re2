@@ -193,7 +193,6 @@
 #include <stdint.h>
 #include <algorithm>
 #include <map>
-#include <mutex>
 #include <string>
 
 #if defined(__APPLE__)
@@ -201,6 +200,7 @@
 #endif
 
 #include "re2/stringpiece.h"
+#include "util/mutex.h"
 
 namespace re2 {
 class Prog;
