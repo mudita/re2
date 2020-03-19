@@ -73,7 +73,7 @@ class Prog {
     void InitByteRange(int lo, int hi, int foldcase, uint32_t out);
     void InitCapture(int cap, uint32_t out);
     void InitEmptyWidth(EmptyOp empty, uint32_t out);
-    void InitMatch(int id);
+    void InitMatch(int32_t id);
     void InitNop(uint32_t out);
     void InitFail();
 
