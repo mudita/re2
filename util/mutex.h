@@ -12,6 +12,8 @@
 
 #ifdef RE2_NO_THREADS
 #include "nothr.h"
+#else
+#include <mutex>
 #endif // RE2_NO_THREADS
 
 #ifdef _WIN32
