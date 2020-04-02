@@ -21,6 +21,7 @@
 //
 // See http://swtch.com/~rsc/regexp/ for a very bare-bones equivalent.
 
+#include <inttypes.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -605,7 +606,7 @@ DFA::State* DFA::WorkqToCachedState(Workq* q, Workq* mq, uint32_t flag) {
   bool sawmatch = false;   // whether queue contains guaranteed kInstMatch
   bool sawmark = false;    // whether queue contains a Mark
   if (ExtraDebug)
-    fprintf(stderr, "WorkqToCachedState %s [%#x]", DumpWorkq(q).c_str(), flag);
+    fprintf(stderr, "WorkqToCachedState %s [%#" PRIx32 "]", DumpWorkq(q).c_str(), flag);
   for (Workq::iterator it = q->begin(); it != q->end(); ++it) {
     int id = *it;
     if (sawmatch && (kind_ == Prog::kFirstMatch || q->is_mark(id)))
@@ -985,7 +986,7 @@ void DFA::RunWorkqOnByte(Workq* oldq, Workq* newq,
   }
 
   if (ExtraDebug)
-    fprintf(stderr, "%s on %d[%#x] -> %s [%d]\n",
+    fprintf(stderr, "%s on %d[%#" PRIx32 "] -> %s [%d]\n",
             DumpWorkq(oldq).c_str(), c, flag, DumpWorkq(newq).c_str(), *ismatch);
 }
 
@@ -1694,7 +1695,7 @@ bool DFA::AnalyzeSearch(SearchParams* params) {
     params->can_prefix_accel = true;
 
   if (ExtraDebug)
-    fprintf(stderr, "anchored=%d fwd=%d flags=%#x state=%s can_prefix_accel=%d\n",
+    fprintf(stderr, "anchored=%d fwd=%d flags=%#" PRIx32 " state=%s can_prefix_accel=%d\n",
             params->anchored, params->run_forward, flags,
             DumpState(params->start).c_str(), params->can_prefix_accel);
 
