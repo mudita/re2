@@ -10,12 +10,29 @@
  * You should assume the locks are *not* re-entrant.
  */
 
-#ifdef RE2_NO_THREADS
-#include "nothr.h"
-#else
-#include <mutex>
-#endif // RE2_NO_THREADS
+#if !defined(RE2_USE_STD_MUTEX) && !defined(RE2_NO_THREAD_SAFETY)
+#error "Choose mutex implementation"
+#endif
 
+#if defined(RE2_USE_STD_MUTEX)
+#include <mutex>
+typedef std::mutex MutexType;
+
+namespace re2 {
+  using once_flag = std::once_flag;
+
+  template <typename... Args>
+  void call_once(Args&&... args ) {
+   std::call_once(std::forward<Args>(args)...);
+  }
+}
+
+#elif defined(RE2_NO_THREAD_SAFETY)
+#include "nothr.h"
+typedef re2::dummy_mutex MutexType;
+
+#else // RE2_USE_STD_MUTEX
+#error "Not supported by this port - add call_once and once_flag implementations"
 #ifdef _WIN32
 // Requires Windows Vista or Windows Server 2008 at minimum.
 #if defined(WINVER) && WINVER >= 0x0600
@@ -38,10 +55,9 @@ typedef SRWLOCK MutexType;
 #include <pthread.h>
 #include <stdlib.h>
 typedef pthread_rwlock_t MutexType;
-#else
-#include <mutex>
-typedef std::mutex MutexType;
 #endif
+
+#endif // RE2_USE_STD_MUTEX
 
 namespace re2 {
 

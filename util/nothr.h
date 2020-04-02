@@ -4,7 +4,7 @@
 #include <functional>
 #include <utility>
 
-namespace std {
+namespace re2 {
 
 using once_flag = bool;
 
@@ -18,9 +18,9 @@ void call_once(once_flag& flag, Callable&& f, Args&&... args ) {
     std::invoke(std::forward<Callable>(f), std::forward<Args>(args) ...);
 }
 
-class mutex {
+class dummy_mutex {
     public:
-        mutex() = default;
+        dummy_mutex() = default;
         void lock() {};
         void unlock() {};
 };

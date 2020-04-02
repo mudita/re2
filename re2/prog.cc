@@ -186,7 +186,7 @@ std::string Prog::DumpByteMap() {
 }
 
 int Prog::first_byte() {
-  std::call_once(first_byte_once_, [](Prog* prog) {
+  re2::call_once(first_byte_once_, [](Prog* prog) {
     prog->first_byte_ = prog->ComputeFirstByte();
   }, this);
   return first_byte_;

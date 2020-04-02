@@ -761,9 +761,9 @@ class RE2 {
   // Map from capture indices to names
   mutable const std::map<int, std::string>* group_names_;
 
-  mutable std::once_flag rprog_once_;
-  mutable std::once_flag named_groups_once_;
-  mutable std::once_flag group_names_once_;
+  mutable re2::once_flag rprog_once_;
+  mutable re2::once_flag named_groups_once_;
+  mutable re2::once_flag group_names_once_;
 
   RE2(const RE2&) = delete;
   RE2& operator=(const RE2&) = delete;
@@ -928,7 +928,7 @@ class LazyRE2 {
 
   // Named accessor/initializer:
   RE2* get() const {
-    std::call_once(once_, &LazyRE2::Init, this);
+    re2::call_once(once_, &LazyRE2::Init, this);
     return ptr_;
   }
 
@@ -938,7 +938,7 @@ class LazyRE2 {
   NoArg barrier_against_excess_initializers_;
 
   mutable RE2* ptr_;
-  mutable std::once_flag once_;
+  mutable re2::once_flag once_;
 
  private:
   static void Init(const LazyRE2* lazy_re2) {
