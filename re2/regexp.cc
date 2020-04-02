@@ -509,7 +509,7 @@ static const char *kErrorStrings[] = {
 };
 
 std::string RegexpStatus::CodeText(enum RegexpStatusCode code) {
-  if (code < 0 || code >= arraysize(kErrorStrings))
+  if (code >= arraysize(kErrorStrings))
     code = kRegexpInternalError;
   return kErrorStrings[code];
 }
