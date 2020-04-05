@@ -4,27 +4,34 @@
 #include <functional>
 #include <utility>
 
-namespace re2 {
+namespace re2
+{
+    class once_flag
+    {
+      public:
+        bool called;
+        once_flag() : called(false)
+        {}
+    };
 
-using once_flag = bool;
+    template <typename Callable, typename... Args> void call_once(once_flag &flag, Callable &&f, Args &&... args)
+    {
+        if (flag.called) {
+            return;
+        }
 
-template <typename Callable, typename... Args>
-void call_once(once_flag& flag, Callable&& f, Args&&... args ) {
-    if (flag) {
-        return;
+        flag.called = true;
+        std::invoke(std::forward<Callable>(f), std::forward<Args>(args)...);
     }
 
-    flag = true;
-    std::invoke(std::forward<Callable>(f), std::forward<Args>(args) ...);
-}
-
-class dummy_mutex {
-    public:
+    class dummy_mutex
+    {
+      public:
         dummy_mutex() = default;
-        void lock() {};
-        void unlock() {};
-};
+        void lock(){};
+        void unlock(){};
+    };
 
-}
+} // namespace re2
 
 #endif // __NOTHR_H__
