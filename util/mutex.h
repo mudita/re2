@@ -10,7 +10,7 @@
  * You should assume the locks are *not* re-entrant.
  */
 
-#if !defined(RE2_USE_STD_MUTEX) && !defined(RE2_NO_THREAD_SAFETY)
+#if !defined(RE2_USE_STD_MUTEX) && !defined(RE2_NO_THREAD_SAFETY) && !defined(RE2_USE_RTOS_WRAPPER)
 #error "Choose mutex implementation"
 #endif
 
@@ -30,7 +30,9 @@ namespace re2 {
 #elif defined(RE2_NO_THREAD_SAFETY)
 #include "nothr.h"
 typedef re2::dummy_mutex MutexType;
-
+#elif defined(RE2_USE_RTOS_WRAPPER)
+#include "rtosthreads.h"
+typedef re2::mutex MutexType;
 #else // RE2_USE_STD_MUTEX
 #error "Not supported by this port - add call_once and once_flag implementations"
 #ifdef _WIN32
