@@ -19,7 +19,7 @@ option(USEPCRE "use PCRE in tests and benchmarks" OFF)
 
 # CMake seems to have no way to enable/disable testing per subproject,
 # so we provide an option similar to BUILD_TESTING, but just for RE2.
-option(RE2_BUILD_TESTING "enable testing for RE2" ON)
+option(RE2_BUILD_TESTING "enable testing for RE2" OFF)
 
 # ABI version
 # http://tldp.org/HOWTO/Program-Library-HOWTO/shared-libraries.html
@@ -79,7 +79,7 @@ set(RE2_SOURCES
     re2/unicode_groups.cc
     util/rune.cc
     util/strutil.cc
-    )
+)
 
 add_library(re2 ${RE2_SOURCES})
 target_include_directories(re2 PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)
@@ -89,6 +89,11 @@ add_library(re2::re2 ALIAS re2)
 if(UNIX)
   target_link_libraries(re2 PUBLIC Threads::Threads)
 endif()
+
+target_include_directories(re2
+  PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+)
 
 if(RE2_BUILD_TESTING)
   set(TESTING_SOURCES
@@ -150,14 +155,4 @@ set(RE2_HEADERS
     re2/re2.h
     re2/set.h
     re2/stringpiece.h
-    )
-
-install(FILES ${RE2_HEADERS}
-        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/re2)
-install(TARGETS re2 EXPORT re2Config
-        ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-        INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
-install(EXPORT re2Config
-        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/re2 NAMESPACE re2::)
+)
