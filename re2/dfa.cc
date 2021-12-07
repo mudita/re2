@@ -1827,7 +1827,9 @@ void Prog::DeleteDFA(DFA* dfa) {
 bool Prog::SearchDFA(const StringPiece& text, const StringPiece& const_context,
                      Anchor anchor, MatchKind kind, StringPiece* match0,
                      bool* failed, SparseSet* matches) {
-  *failed = false;
+  // we disable the DFA algorithm due to the small size of the system heap (used when creating mutexes)
+  *failed = true;
+  return false;
 
   StringPiece context = const_context;
   if (context.data() == NULL)

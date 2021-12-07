@@ -645,7 +645,8 @@ class RE2 {
     // If this happens too often, RE2 falls back on the NFA implementation.
 
     // For now, make the default budget something close to Code Search.
-    static const int kDefaultMaxMem = 8<<20;
+    // limit to 128kB Due to the small size of the system heap used when creating mutexes
+    static const int kDefaultMaxMem = 8<<14;
 
     enum Encoding {
       EncodingUTF8 = 1,
