@@ -37,6 +37,7 @@ typedef re2::mutex MutexType;
 #error "Not supported by this port - add call_once and once_flag implementations"
 #ifdef _WIN32
 // Requires Windows Vista or Windows Server 2008 at minimum.
+#include <windows.h>
 #if defined(WINVER) && WINVER >= 0x0600
 #define MUTEX_IS_WIN32_SRWLOCK
 #endif
@@ -51,7 +52,6 @@ typedef re2::mutex MutexType;
 #endif
 
 #if defined(MUTEX_IS_WIN32_SRWLOCK)
-#include <windows.h>
 typedef SRWLOCK MutexType;
 #elif defined(MUTEX_IS_PTHREAD_RWLOCK)
 #include <pthread.h>
@@ -90,7 +90,7 @@ class Mutex {
 
 #if defined(MUTEX_IS_WIN32_SRWLOCK)
 
-Mutex::Mutex()             { InitializeSRWLock(&mutex_); }
+Mutex::Mutex()             : mutex_(SRWLOCK_INIT) { }
 Mutex::~Mutex()            { }
 void Mutex::Lock()         { AcquireSRWLockExclusive(&mutex_); }
 void Mutex::Unlock()       { ReleaseSRWLockExclusive(&mutex_); }
